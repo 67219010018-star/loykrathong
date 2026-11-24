@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ลอยกระทงออนไลน์</title>
+<link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff7ec;--panel:#fff;--tx:#3b2a1a;--mu:#7a6650;--ac:#d9480f;--on:#fff;--bd:#ecd9bf;--chip:#fff3e0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1730;--panel:#16233f;--tx:#f3e9d8;--mu:#a9b6d0;--ac:#ffb347;--on:#1a1000;--bd:#2c3d63;--chip:#1d2d50}}
+:root[data-theme="dark"]{--bg:#0d1730;--panel:#16233f;--tx:#f3e9d8;--mu:#a9b6d0;--ac:#ffb347;--on:#1a1000;--bd:#2c3d63;--chip:#1d2d50}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 'Sarabun','Noto Sans Thai','Leelawadee UI',Tahoma,sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:12px}
+h1{margin:4px 0;font-size:26px}h2{font-size:15px;margin:12px 0 6px}.mu{color:var(--mu);margin:0 0 8px}
+nav{display:flex;gap:8px;flex-wrap:wrap}
+nav button,.chip{border:2px solid var(--bd);background:var(--chip);color:var(--tx);border-radius:12px;font:inherit;cursor:pointer}
+nav button{padding:6px 14px}nav button[aria-current=true]{background:var(--ac);color:var(--on);border-color:var(--ac)}
+.view[hidden]{display:none}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);gap:14px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--bd);border-radius:14px;padding:12px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:4px 8px;display:flex;flex-direction:column;align-items:center;font-size:12px;min-width:64px}
+.chip[aria-pressed=true]{border-color:var(--ac);box-shadow:0 0 0 2px var(--ac)}
+.chip svg{width:64px;height:auto}.chip .f{width:36px}
+input,textarea{width:100%;box-sizing:border-box;margin-top:8px;padding:8px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit}
+.go{background:var(--ac);color:var(--on);border:0;border-radius:12px;padding:10px 18px;font:inherit;font-weight:600;cursor:pointer;width:100%;margin-top:8px}
+#pv svg{width:100%;max-width:340px}
+.fl{animation:fk .3s infinite alternate;transform-box:fill-box;transform-origin:50% 100%}@keyframes fk{to{transform:scale(1,1.2)}}
+.stage{position:relative;height:clamp(420px,72vh,700px);overflow:hidden;border-radius:14px;background:linear-gradient(#050a24,#14275a 48%,#1b3a6b 50%)}
+.water{position:absolute;left:0;right:0;bottom:0;top:50%;background:linear-gradient(#18335f,#0a1a38)}
+.moon{position:absolute;right:14%;top:7%;width:96px;height:96px;border-radius:50%;box-shadow:0 0 24px 6px rgba(255,248,215,.6),0 0 80px 30px rgba(255,240,190,.25),0 0 160px 70px rgba(200,215,255,.12);background:radial-gradient(circle,transparent 62%,rgba(90,85,70,.38) 100%),radial-gradient(ellipse 20% 16% at 36% 30%,rgba(120,118,105,.55),transparent),radial-gradient(ellipse 15% 14% at 55% 33%,rgba(125,122,108,.5),transparent),radial-gradient(ellipse 14% 12% at 52% 52%,rgba(135,130,115,.45),transparent),radial-gradient(ellipse 12% 16% at 74% 34%,rgba(120,118,105,.5),transparent),radial-gradient(ellipse 14% 24% at 22% 52%,rgba(130,126,112,.4),transparent),radial-gradient(circle at 40% 78%,rgba(150,145,130,.5) 0 4%,transparent 5%),radial-gradient(circle at 66% 70%,rgba(255,255,245,.5) 0 3%,rgba(150,145,130,.35) 4%,transparent 6%),radial-gradient(circle at 34% 40%,#fffef3,#efe9cf 60%,#cfc8a5)}
+body.rv{overflow:hidden}
+body.rv header{position:fixed;top:0;left:0;right:0;max-width:none;z-index:100000;padding:calc(8px + env(safe-area-inset-top,0px)) 12px 24px;background:linear-gradient(rgba(0,0,0,.55),transparent);pointer-events:none}
+body.rv header h1,body.rv header .mu{display:none}
+body.rv nav{pointer-events:auto}
+body.rv main.wrap{max-width:none;padding:0}
+body.rv .stage{height:100vh;height:100dvh;border-radius:0}
+body.rv .hint{top:auto;bottom:calc(12px + env(safe-area-inset-bottom,0px))}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%}
+.hint{position:absolute;left:10px;top:10px;font-size:12px;color:#dbe6ff;background:rgba(0,0,0,.35);padding:3px 10px;border-radius:99px;z-index:99999}
+.kr{position:absolute;left:0;top:0;width:110px;cursor:pointer;transform-origin:0 0;will-change:transform}
+.kr svg{width:100%;display:block}
+.kr .rf{position:absolute;left:0;top:84px;width:100%;pointer-events:none;opacity:.3;filter:blur(1.5px);-webkit-mask-image:linear-gradient(to bottom,transparent,#000);mask-image:linear-gradient(to bottom,transparent,#000);animation:wv 2.4s ease-in-out infinite}
+@keyframes wv{0%,100%{transform:scaleY(-1) skewX(-3deg)}50%{transform:scaleY(-1) skewX(3deg)}}
+.kr.lit::before{content:"";position:absolute;left:-25%;top:62%;width:150%;height:45%;background:radial-gradient(ellipse,rgba(255,180,60,.4),transparent 70%);pointer-events:none;z-index:-1}
+.kr .nm{position:relative;z-index:1}
+.nm{display:block;font-style:normal;text-align:center;font-size:11px;font-weight:600;color:#ffe9b8;text-shadow:0 1px 3px #000;margin-top:-2px}
+.bub{display:none;position:absolute;bottom:100%;left:50%;transform:translateX(-50%);width:170px;background:#fff8e1;color:#4a2c0a;border-radius:10px;padding:6px 8px;font-size:12px;line-height:1.3}
+.kr.open .bub{display:block}
+.lan{position:absolute;left:0;top:0;width:76px;height:92px;box-sizing:border-box;border-radius:38% 38% 26% 26%/30% 30% 20% 20%;background:radial-gradient(ellipse at 50% 70%,#fff2b0,#ffb236 55%,#e8731a);box-shadow:0 0 28px 10px rgba(255,170,50,.55);display:flex;align-items:center;justify-content:center;text-align:center;padding:10px 6px;font-size:11px;line-height:1.2;color:#7a1f00;word-break:break-word;overflow:hidden}
+.lan.big{position:relative;width:130px;height:158px;font-size:15px;margin:18px auto}
+.lan{background:radial-gradient(ellipse at 50% 70%,var(--c0,#fff2b0),var(--c1,#ffb236) 55%,var(--c2,#e8731a));box-shadow:0 0 28px 10px var(--g,rgba(255,170,50,.55));color:var(--tx,#6b1a00);font-weight:600}
+.lan.s-ball{border-radius:50%}.lan.s-cyl{border-radius:12% 12% 10% 10%/8% 8% 7% 7%;border-top:6px solid rgba(70,40,10,.85);border-bottom:6px solid rgba(70,40,10,.85)}.lan.s-egg{border-radius:50% 50% 50% 50%/68% 68% 32% 32%}.lan.s-box{border-radius:6px}
+.lan::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.3;overflow:hidden;color:var(--tx);font-size:13px;line-height:20px;text-align:center;word-break:break-all;letter-spacing:.3em}
+.lan.p-rib::before{background:repeating-linear-gradient(90deg,var(--tx) 0 1.5px,transparent 1.5px 13px)}
+.lan.p-dot::before{background:radial-gradient(circle,var(--tx) 1.6px,transparent 2.2px) 0 0/13px 13px}
+.lan.p-flr::before{content:"✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿✿";padding:8px 0}
+.lan.p-star::before{content:"✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦✦";padding:8px 0}
+</style>
+</head>
+<body>
+<header class="wrap">
+<h1>🪷 ลอยกระทงออนไลน์</h1>
+<p class="mu">ทำกระทงของคุณ เขียนคำอธิษฐาน แล้วปล่อยลงแม่น้ำ หรือส่งโคมขึ้นฟ้า</p>
+<nav><button data-v="make">🌸 ทำกระทง</button><button data-v="river">🌊 แม่น้ำ</button><button data-v="lantern">🏮 โคมลอย</button></nav>
+</header>
+<main class="wrap">
+<section id="v-make" class="view"><div class="grid">
+<div class="card" style="text-align:center"><div id="pv"></div>
+<input id="nm" maxlength="30" placeholder="ชื่อของคุณ">
+<textarea id="wish" rows="3" maxlength="120" placeholder="พิมพ์คำอธิษฐาน..."></textarea>
+<button class="go" id="float">🌊 ลอยกระทง</button></div>
+<div class="card"><h2>ฐานกระทง</h2><div id="bases" class="chips"></div>
+<h2>ดอกไม้ (เลือกได้หลายชนิด)</h2><div id="flowers" class="chips"></div>
+<h2>เทียน</h2><div id="candles" class="chips"></div>
+<h2>ธูป</h2><div id="incense" class="chips"></div></div>
+</div></section>
+<section id="v-river" class="view"><div class="stage" id="stage"><div class="moon"></div><div class="water"></div><canvas id="cv"></canvas><div id="items"></div><div class="hint">แตะที่กระทงเพื่ออ่านคำอธิษฐาน • แตะท้องฟ้าเพื่อจุดพลุ</div></div></section>
+<section id="v-lantern" class="view"><div class="card" style="max-width:420px;margin:auto;text-align:center">
+<div class="lan big" id="lp">เขียนคำอธิษฐาน</div>
+<h2>สีโคม</h2><div id="lc" class="chips" style="justify-content:center"></div><h2>ทรงโคม</h2><div id="ls" class="chips" style="justify-content:center"></div><h2>ลายโคม</h2><div id="lpt" class="chips" style="justify-content:center"></div>
+<input id="lt" maxlength="40" placeholder="เขียนคำลงในโคม (ไม่เกิน 40 ตัวอักษร)">
+<button class="go" id="release">🏮 ปล่อยโคมสู่ท้องฟ้า</button></div></section>
+</main>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const E=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+const rnd=a=>a[Math.random()*a.length|0];
+const P=(n,rx,ry,o,f,s)=>{let r='';for(let i=0;i<n;i++)r+=`<ellipse cy="${-o}" rx="${rx}" ry="${ry}" fill="${f}" stroke="${s}" stroke-width=".6" transform="rotate(${i*360/n})"/>`;return r};
+const rose=(a,b)=>`<circle r="9" fill="${a}" stroke="${b}" stroke-width=".8"/><path d="M-6 0a6 6 0 0 1 12 0a4 4 0 0 1-8 0a2.5 2.5 0 0 1 5 0" fill="none" stroke="${b}" stroke-width="1.5" stroke-linecap="round"/>`;
+const FL={
+lotus:{n:'ดอกบัว',d:()=>P(8,5,11,9,'#f7a8c4','#d9608f')+P(6,4.5,9,6,'#fcd0e0','#e07aa0')+'<circle r="4" fill="#ffd54a"/>'},
+'rose-red':{n:'กุหลาบแดง',d:()=>rose('#d32f2f','#8e1b1b')},
+'rose-pink':{n:'กุหลาบชมพู',d:()=>rose('#f48fb1','#c2185b')},
+'rose-white':{n:'กุหลาบขาว',d:()=>rose('#fafafa','#b8b8b8')},
+'rose-yellow':{n:'กุหลาบเหลือง',d:()=>rose('#fdd835','#b58900')},
+marigold:{n:'ดาวเรือง',d:()=>P(14,3.4,6,8,'#f9a11b','#d97706')+P(10,3.2,5,5,'#ffbf2e','#e08a00')+'<circle r="3" fill="#e07800"/>'},
+jasmine:{n:'มะลิ',d:()=>P(5,3.4,5.5,5.5,'#fff','#cfd6c8')+'<circle r="2" fill="#f5d96b"/>'},
+amaranth:{n:'บานไม่รู้โรย',d:()=>'<circle r="9" fill="#a3208a"/>'+[...Array(12)].map((_,i)=>`<circle cx="${Math.cos(i*2.4)*(3+i%4*1.6)}" cy="${Math.sin(i*2.4)*(3+i%4*1.6)}" r="1.8" fill="#d56bc0"/>`).join('')},
+gardenia:{n:'พุด',d:()=>P(6,5,9,7,'#fffdf5','#d8d2b8')+P(6,4,6,4,'#fff','#d8d2b8')+'<circle r="2.5" fill="#f1e29a"/>'}};
+const lp=f=>{const a=[];for(let i=0;i<16;i++){const t=i/16*6.283,x=100+68*Math.cos(t),y=114+13*Math.sin(t);if((y>114)===f)a.push([x,y,i])}return a.sort((p,q)=>p[1]-q[1]).map(([x,y,i])=>`<ellipse cy="-13" rx="10" ry="18" fill="${i%2?'#fbd0e1':'#f7a8c4'}" stroke="#d9608f" stroke-width=".7" transform="translate(${x} ${y}) rotate(${(x-100)/68*30})"/>`).join('')};
+const pleats=()=>[...Array(16)].map((_,i)=>{const a=i/16*6.283,c=Math.cos(a),s=Math.sin(a);return `<line x1="${100+58*c}" y1="${112+12*s}" x2="${100+76*c}" y2="${112+19*s}" stroke="#1b5e20" stroke-width="2"/>`+(i%4?'':`<circle cx="${100+76*c}" cy="${112+19*s}" r="2" fill="#f0c030"/>`)}).join('');
+const BS={
+bread:{n:'ฐานขนมปัง',b:()=>'<ellipse cx="100" cy="143" rx="72" ry="12" fill="#a8702f"/><path d="M28 108v32a72 14 0 0 0 144 0v-32z" fill="#e3b574"/><path d="M40 125q60 14 120 0M36 114q64 14 128 0" stroke="#c98f4a" fill="none" stroke-width="1.2"/><ellipse cx="100" cy="108" rx="72" ry="16" fill="#f3d9a4"/><ellipse cx="100" cy="108" rx="60" ry="11" fill="#e8c88a"/>',f:()=>''},
+lotus:{n:'ฐานดอกบัว',b:()=>'<ellipse cx="100" cy="128" rx="64" ry="20" fill="#d9608f"/>'+lp(false),f:()=>lp(true)},
+leaf:{n:'ฐานใบตอง',b:()=>'<path d="M24 112v22a76 18 0 0 0 152 0v-22z" fill="#2f8a35"/><ellipse cx="100" cy="112" rx="76" ry="19" fill="#4caf50"/><ellipse cx="100" cy="112" rx="58" ry="12" fill="#66bb6a"/>'+pleats(),f:()=>''}};
+const lg=(i,a,b)=>`<linearGradient id="${i}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
+const rg=(i,a,b,c)=>`<radialGradient id="${i}" cx=".4" cy=".35" r=".75"><stop offset="0" stop-color="${a}"/><stop offset=".55" stop-color="${b}"/><stop offset="1" stop-color="${c}"/></radialGradient>`;
+document.body.insertAdjacentHTML('beforeend',`<svg width="0" height="0" style="position:absolute"><defs>${lg('pt','#ffe9f1','#e0488a')}${lg('pt2','#fff6fa','#f08fb6')}${lg('mg','#ffcf40','#e45a00')}${lg('jm','#ffffff','#e8e2c8')}${lg('gd','#ffffff','#e3dcb8')}${lg('lf','#9ccc65','#2e7d32')}<linearGradient id="bs" x1="0" x2="1"><stop offset="0" stop-color="#a5672a"/><stop offset=".4" stop-color="#f1c27a"/><stop offset="1" stop-color="#9a5d22"/></linearGradient><linearGradient id="lf2" x1="0" x2="1"><stop offset="0" stop-color="#1f5a22"/><stop offset=".4" stop-color="#4f9a3c"/><stop offset="1" stop-color="#1b4d1e"/></linearGradient>${rg('rR','#ff7a7a','#c62828','#7b1010')}${rg('rP','#ffd0e0','#ec6a9c','#b0245f')}${rg('rW','#ffffff','#f1efe6','#bdb8a6')}${rg('rY','#fff08a','#f5c518','#b88700')}${rg('am','#f06ad0','#a3208a','#5e0f50')}${rg('bt','#fff7dd','#ecc888','#c39450')}</defs></svg>`);
+const pp=(n,l,w,f,o=0,s='rgba(120,20,60,.35)')=>{let r='';for(let i=0;i<n;i++)r+=`<path d="M0 0C${-w} ${-l*.25} ${-w} ${-l*.75} 0 ${-l}C${w} ${-l*.75} ${w} ${-l*.25} 0 0Z" fill="${f}" stroke="${s}" stroke-width=".5" transform="rotate(${o+i*360/n})"/>`;return r};
+const ro=(g,d)=>[...Array(5)].map((_,i)=>`<circle cx="${Math.cos(i*1.257)*5.5}" cy="${Math.sin(i*1.257)*5.5}" r="5.5" fill="url(#${g})" stroke="${d}" stroke-width=".5"/>`).join('')+`<circle r="6" fill="url(#${g})" stroke="${d}" stroke-width=".5"/><path d="M0 -1a1.5 1.5 0 1 1 1.6 1.5a3 3 0 1 1-3.4-2.4a4.6 4.6 0 0 1 5.2 1.4" fill="none" stroke="${d}" stroke-width=".8" stroke-linecap="round"/><path d="M-5 -4a6 6 0 0 1 7-3" fill="none" stroke="#fff" stroke-opacity=".4" stroke-width="1.2" stroke-linecap="round"/>`;
+const wp='rgba(150,140,100,.5)';
+FL.lotus.d=()=>pp(8,22,8,'url(#pt)')+pp(8,19,7,'url(#pt)',22)+pp(6,14,6,'url(#pt2)',10)+pp(5,9,4,'url(#pt2)')+'<circle r="3.2" fill="#f7c600"/>'+[...Array(8)].map((_,i)=>`<circle cx="${Math.cos(i)*3.6}" cy="${Math.sin(i)*3.6}" r=".9" fill="#c98a00"/>`).join('');
+FL['rose-red'].d=()=>ro('rR','#6d0d0d');FL['rose-pink'].d=()=>ro('rP','#9c1d52');FL['rose-white'].d=()=>ro('rW','#a9a491');FL['rose-yellow'].d=()=>ro('rY','#946c00');
+FL.marigold.d=()=>P(16,3.8,8,9,'url(#mg)','#a63d00')+P(12,3.6,6.5,6,'url(#mg)','#a63d00')+P(8,3.2,5,3.5,'url(#mg)','#a63d00')+'<circle r="2.2" fill="#c44a00"/>';
+FL.jasmine.d=()=>pp(5,9,3.4,'url(#jm)',0,wp)+pp(5,7,3,'url(#jm)',36,wp)+'<circle r="1.6" fill="#f2d24b"/>';
+FL.gardenia.d=()=>pp(6,12,5.5,'url(#gd)',0,wp)+pp(6,10,5,'url(#gd)',30,wp)+pp(5,6,3.5,'url(#gd)',10,wp)+'<circle r="1.8" fill="#e9d98a"/>';
+FL.amaranth.d=()=>pp(5,11,3,'url(#lf)',0,'rgba(0,60,0,.4)')+'<circle r="9" fill="url(#am)"/>'+[...Array(26)].map((_,i)=>{const a=i*2.4,d=1+i%5*1.6;return `<circle cx="${Math.cos(a)*d}" cy="${Math.sin(a)*d}" r="1.7" fill="${i%2?'#e07bc8':'#8a1a74'}" opacity=".8"/>`}).join('')+'<circle cx="-3" cy="-3.5" r="2.5" fill="#fff" opacity=".25"/>';
+BS.bread.b=()=>'<ellipse cx="100" cy="150" rx="76" ry="8" fill="rgba(0,0,0,.25)"/><path d="M26 108v32a74 15 0 0 0 148 0v-32z" fill="url(#bs)"/><path d="M30 124q70 16 140 0" stroke="#8a5420" stroke-opacity=".4" fill="none" stroke-width="1.5"/><ellipse cx="100" cy="108" rx="74" ry="17" fill="#b9772f"/><ellipse cx="100" cy="108" rx="66" ry="13.5" fill="url(#bt)"/>'+[...Array(22)].map((_,i)=>`<ellipse cx="${100+Math.cos(i*2.4)*(10+i%6*8)}" cy="${108+Math.sin(i*2.4)*(2+i%6*1.8)}" rx="${1.2+i%3*.7}" ry=".7" fill="rgba(160,110,50,.4)"/>`).join('');
+BS.leaf.b=()=>'<ellipse cx="100" cy="146" rx="78" ry="9" fill="rgba(0,0,0,.25)"/><path d="M24 112v22a76 18 0 0 0 152 0v-22z" fill="url(#lf2)"/><ellipse cx="100" cy="112" rx="76" ry="19" fill="url(#lf)"/>'+[...Array(24)].map((_,i)=>{const a=i/24*6.283,b=a+.26;return `<path d="M${100+60*Math.cos(a)} ${112+13*Math.sin(a)}L${100+80*Math.cos(a+.13)} ${112+21*Math.sin(a+.13)}L${100+60*Math.cos(b)} ${112+13*Math.sin(b)}Z" fill="${i%2?'#7cb342':'#33691e'}" opacity=".85"/>`}).join('')+'<ellipse cx="100" cy="112" rx="56" ry="11.5" fill="#6fae3e"/><path d="M50 112h100M60 106q40 6 80 0M60 118q40-6 80 0" stroke="#3d7a22" stroke-width=".8" fill="none" opacity=".6"/>'+[0,6,12,18].map(i=>{const a=i/24*6.283+.13;return `<circle cx="${100+78*Math.cos(a)}" cy="${112+20*Math.sin(a)}" r="1.8" fill="#f0c030"/>`}).join('');
+const lq=(f,R,ry,n,l,w,fill,off,yc)=>{const a=[];for(let i=0;i<n;i++){const t=i/n*6.283+off,x=100+R*Math.cos(t),y=yc+ry*Math.sin(t);if((y>yc)===f)a.push([x,y])}return a.sort((p,q)=>p[1]-q[1]).map(([x,y])=>`<g transform="translate(${x} ${y}) rotate(${(x-100)/R*28})"><path d="M0 0C${-w} ${-l*.25} ${-w} ${-l*.75} 0 ${-l}C${w} ${-l*.75} ${w} ${-l*.25} 0 0Z" fill="url(#${fill})" stroke="rgba(160,40,90,.45)" stroke-width=".6"/><path d="M0 -3V${-l*.8}" stroke="rgba(160,40,90,.25)" stroke-width=".6"/></g>`).join('')};
+BS.lotus.b=()=>'<ellipse cx="100" cy="150" rx="70" ry="8" fill="rgba(0,0,0,.25)"/><ellipse cx="100" cy="128" rx="64" ry="20" fill="#c2427a"/>'+lq(false,70,13,16,28,10,'pt',0,114)+lq(false,52,10,12,22,8,'pt2',.2,108);
+BS.lotus.f=()=>lq(true,52,10,12,22,8,'pt2',.2,108)+lq(true,70,13,16,28,10,'pt',0,114);
+const LC=[['ส้มทอง','#fff2b0','#ffb236','#e8731a','rgba(255,170,50,.55)','#6b1a00'],['แดง','#ffd9c9','#ff5a4a','#a30f1a','rgba(255,70,50,.5)','#4a0508'],['ชมพู','#fff0f6','#ff8fb8','#d6336c','rgba(255,120,170,.5)','#5a0a2a'],['ฟ้า','#eaf9ff','#7ed0ff','#1c7ed6','rgba(100,190,255,.5)','#06284f'],['เขียว','#f1ffd9','#9be564','#2f9e44','rgba(140,230,100,.45)','#0f3a14'],['ม่วง','#f6e8ff','#c58cff','#7048e8','rgba(180,130,255,.5)','#2d0f5c'],['ขาว','#ffffff','#fbf3dc','#d9cc9c','rgba(255,245,200,.55)','#5a4a1a']];
+const LS=[['std','ทรงมาตรฐาน'],['ball','ทรงกลม'],['cyl','ทรงกระบอก'],['egg','ทรงหยดน้ำ'],['box','ทรงเหลี่ยม']],LP=[['none','เรียบ'],['rib','ลายเส้น'],['dot','ลายจุด'],['flr','ลายดอกไม้'],['star','ลายดาว']];
+const L={c:0,s:'std',p:'none'},rndL=()=>({c:Math.random()*LC.length|0,s:rnd(LS)[0],p:rnd(LP)[0]});
+function mkLan(t,o,big){const c=LC[o.c],e=E('div',`lan s-${o.s} p-${o.p}${big?' big':''}`,t);e.style.cssText=`--c0:${c[1]};--c1:${c[2]};--c2:${c[3]};--g:${c[4]};--tx:${c[5]}`;return e}
+function buildL(){const sw=c=>`<span style="display:block;width:30px;height:30px;border-radius:50%;background:radial-gradient(circle at 50% 65%,${c[1]},${c[2]} 55%,${c[3]})"></span>`;
+ $('#lc').replaceChildren(...LC.map((c,i)=>chip(c[0],sw(c),L.c===i,()=>{L.c=i;renderL()})));
+ $('#ls').replaceChildren(...LS.map(([k,n])=>chip(n,'',L.s===k,()=>{L.s=k;renderL()})));
+ $('#lpt').replaceChildren(...LP.map(([k,n])=>chip(n,'',L.p===k,()=>{L.p=k;renderL()})))}
+function renderL(){const n=mkLan($('#lt').value||'เขียนคำอธิษฐาน',L,true);n.id='lp';$('#lp').replaceWith(n);buildL()}
+const CC={none:'',white:'#fff8e7',yellow:'#ffd54a',red:'#e53935'};
+function krathongSVG(c){
+ const cy=106,fs=c.flowers,k=fs.length,B=BS[c.base];let back='',front='',mid='';
+ if(k){const sl=[];for(let i=0;i<7;i++)sl.push([40+i*20,cy-6-Math.sin(i/6*Math.PI)*4,.9]);for(let i=0;i<6;i++)sl.push([50+i*20,cy+7+Math.sin(i/5*Math.PI)*3,1.1]);
+  sl.forEach(([x,y,s],i)=>{const g=`<g transform="translate(${x} ${y}) scale(${s})"><ellipse cy="8" rx="10" ry="3.5" fill="rgba(0,0,0,.22)"/>${FL[fs[i%k]].d()}</g>`;if(i<7)back+=g;else front+=g})}
+ const ix=c.candle!=='none'?86:100,cx=c.incense?116:100;
+ if(c.incense)mid+=[[-16,-70],[-6,-76],[6,-72]].map(([dx,dy])=>`<line x1="${ix}" y1="${cy}" x2="${ix+dx}" y2="${cy+dy}" stroke="#8d5524" stroke-width="1.8"/><circle cx="${ix+dx}" cy="${cy+dy}" r="2.2" fill="#ff5722"/>`).join('');
+ if(c.candle!=='none')mid+=`<rect x="${cx-4}" y="${cy-40}" width="8" height="40" rx="1.5" fill="${CC[c.candle]}" stroke="rgba(0,0,0,.2)" stroke-width=".5"/><path class="fl" d="M${cx} ${cy-58}c5 7 5 12 0 15c-5-3-5-8 0-15z" fill="#ffb300"/><path class="fl" d="M${cx} ${cy-53}c2 3 2 6 0 8c-2-2-2-5 0-8z" fill="#fff59d"/>`;
+ return `<svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">${B.b()}${back}${mid}${front}${B.f()}</svg>`}
+/* ---------- builder ---------- */
+const S={base:'bread',flowers:['lotus','marigold','jasmine'],candle:'yellow',incense:true};
+function chip(label,svg,on,fn){const b=E('button','chip');b.type='button';b.innerHTML=svg;b.append(label);b.setAttribute('aria-pressed',on);b.onclick=fn;return b}
+function build(){
+ $('#bases').replaceChildren(...Object.entries(BS).map(([k,v])=>chip(v.n,krathongSVG({base:k,flowers:[],candle:'none',incense:false}),S.base===k,()=>{S.base=k;build()})));
+ $('#flowers').replaceChildren(...Object.entries(FL).map(([k,v])=>chip(v.n,`<svg class="f" viewBox="-14 -14 28 28">${v.d()}</svg>`,S.flowers.includes(k),()=>{S.flowers=S.flowers.includes(k)?S.flowers.filter(x=>x!==k):[...S.flowers,k];build()})));
+ $('#candles').replaceChildren(...[['none','ไม่ใส่'],['white','เทียนขาว'],['yellow','เทียนเหลือง'],['red','เทียนแดง']].map(([k,n])=>chip(n,`<svg class="f" viewBox="0 0 20 30"><rect x="6" y="10" width="8" height="20" fill="${CC[k]||'none'}" stroke="#999" stroke-width=".6"/></svg>`,S.candle===k,()=>{S.candle=k;build()})));
+ $('#incense').replaceChildren(...[[false,'ไม่ใส่'],[true,'ธูป 3 ดอก']].map(([k,n])=>chip(n,`<svg class="f" viewBox="0 0 20 30"><path d="M4 30L2 4M10 30V2M16 30L18 4" stroke="#8d5524" stroke-width="1.6"/></svg>`,S.incense===k,()=>{S.incense=k;build()})));
+ $('#pv').innerHTML=krathongSVG(S)}
+/* ---------- river ---------- */
+let view='make',W=0,H=0,stars=[],krs=[],lans=[],rk=[],fw=[],sh=null,cl=[];
+const st=$('#stage'),cv=$('#cv'),ctx=cv.getContext('2d'),items=$('#items');
+function size(){const r=st.getBoundingClientRect();if(!r.width)return;const d=devicePixelRatio||1;W=r.width;H=r.height;cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);const mx=W*.86-48,my=H*.07+48,C=['#cfe0ff','#ffffff','#fff1c9','#ffd8a8','#ffb9a0'],R=Math.random,gs=()=>R()+R()+R()-1.5;stars=[];for(let i=0;i<620;i++){const m=i>=260,al=(R()-.5)*W*1.1,ac=gs()*H*.07,x=m?W*.4+al*.853+ac*.522:R()*W,y=m?H*.23-al*.522+ac*.853:R()*H*.48;if(x<0||x>W||y<0||y>H*.48||Math.hypot(x-mx,y-my)<110)continue;stars.push({x,y,r:m?.25+R()*.4:.3+Math.pow(R(),5)*2,c:m?'#cfdcff':C[R()*5|0],p:R()*6,q:R(),a:m?.45:1})}
+cl=Array.from({length:7},()=>({x:R()*W,y:H*(.05+R()*.34),s:.6+R()*.9,sp:4+R()*8,a:.2+R()*.2,b:110+R()*60|0,p:Array.from({length:9},(_,k)=>[k*22+R()*10,R()*16-8-Math.sin(k/8*3.14)*14,22+R()*16])}))}
+addEventListener('resize',size);
+function floatKr(c,name,wish,x){
+ const nmv=name||'ไม่ระบุชื่อ',el=E('div','kr');const sv=krathongSVG(c),rf=E('div','rf');el.innerHTML=sv;rf.innerHTML=sv;if(c.candle!=='none')el.classList.add('lit');el.append(rf,E('em','nm',nmv),E('div','bub',nmv+': '+(wish||'(ไม่ได้เขียนคำอธิษฐาน)')));
+ el.onclick=()=>el.classList.toggle('open');items.append(el);
+ const o={el,x:x??(W||900)*(.1+Math.random()*.8),y:.58+Math.random()*.26,sp:8+Math.random()*10,ph:Math.random()*6};krs.push(o);return o}
+function spawnLantern(t,x,o){const el=mkLan(t,o||rndL());items.append(el);lans.push({el,x:x??Math.random()*((W||900)-80),age:0,dur:28+Math.random()*8,ph:Math.random()*6})}
+const burst=(x,y,h)=>{for(let i=0;i<70;i++){const a=i/70*6.283,v=1.2+Math.random()*2.6;fw.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,h:h+Math.random()*40})}};
+const launch=x=>{rk.push({x:x??W*(.1+Math.random()*.8),y:H*.5,ty:H*(.08+Math.random()*.25),h:Math.random()*360})};
+let last=0,nextL=0,nextF=0,nextS=0;
+function loop(t){requestAnimationFrame(loop);if(view!=='river'||!W)return;const dt=Math.min((t-last)/1000,.1);last=t;
+ ctx.clearRect(0,0,W,H);ctx.fillStyle='#fff';
+ ctx.save();ctx.beginPath();ctx.rect(0,0,W,H*.5);ctx.clip();ctx.translate(W*.4,H*.23);ctx.rotate(-.55);const mw=ctx.createLinearGradient(0,-H*.13,0,H*.13);mw.addColorStop(0,'rgba(170,190,255,0)');mw.addColorStop(.5,'rgba(190,200,255,.11)');mw.addColorStop(1,'rgba(170,190,255,0)');ctx.fillStyle=mw;ctx.fillRect(-W,-H*.13,W*2,H*.26);ctx.restore();
+ stars.forEach(s=>{const a=s.a*(.6+.4*Math.sin(t/(450+s.q*1100)+s.p));ctx.fillStyle=s.c;ctx.globalAlpha=a;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,7);ctx.fill();if(s.r>1.1){ctx.globalAlpha=a*.18;ctx.beginPath();ctx.arc(s.x,s.y,s.r*3.5,0,7);ctx.fill();if(s.r>1.6){ctx.globalAlpha=a*.6;ctx.fillRect(s.x-s.r*3,s.y-.4,s.r*6,.8);ctx.fillRect(s.x-.4,s.y-s.r*3,.8,s.r*6)}}});ctx.globalAlpha=1;
+ cl.forEach(c=>{c.x+=c.sp*dt;if(c.x>W+260*c.s)c.x=-260*c.s;c.p.forEach(([dx,dy,r])=>{const x=c.x+dx*c.s,y=c.y+dy*c.s,Q=r*c.s,g=ctx.createRadialGradient(x,y-Q*.2,Q*.1,x,y,Q);g.addColorStop(0,`rgba(${c.b},${c.b+12},${c.b+50},${c.a})`);g.addColorStop(1,`rgba(${c.b-30},${c.b-20},${c.b+20},0)`);ctx.fillStyle=g;ctx.beginPath();ctx.arc(x,y,Q,0,7);ctx.fill()})});
+ if(t>nextS){nextS=t+5000+Math.random()*5000;sh={x:W*(.4+Math.random()*.6),y:Math.random()*H*.2,l:1}}
+ if(sh){sh.x-=420*dt;sh.y+=190*dt;sh.l-=dt*1.1;if(sh.l<=0)sh=null;else{ctx.strokeStyle=`rgba(255,255,255,${sh.l})`;ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(sh.x,sh.y);ctx.lineTo(sh.x+55,sh.y-25);ctx.stroke();ctx.lineWidth=1}}
+ for(let i=0;i<9;i++){const y=H*.52+i*H*.05;ctx.strokeStyle=`rgba(180,210,255,${.05+i*.012})`;ctx.beginPath();for(let x=0;x<=W;x+=12){const yy=y+Math.sin(x/40+t/900+i)*(1.5+i*.4);x?ctx.lineTo(x,yy):ctx.moveTo(x,yy)}ctx.stroke()}
+ ctx.fillStyle='rgba(255,240,180,.22)';for(let i=0;i<10;i++)ctx.fillRect(W*.86-48-18-i*2+Math.sin(t/500+i)*6,H*.52+i*H*.045,36+i*4,3);
+ krs.forEach(o=>{o.x-=o.sp*dt;if(o.x<-120)o.x=W+20;const y=H*o.y,s=.5+(o.y-.5)*1.8;o.el.style.transform=`translate(${o.x}px,${y+Math.sin(t/600+o.ph)*3}px) scale(${s})`;o.el.style.zIndex=Math.round(y);const cx=o.x+55*s,cy=y+84*s;for(let k=0;k<3;k++){const ph=(t/2200+k/3)%1,rx=(26+60*ph)*s;ctx.strokeStyle=`rgba(200,225,255,${.38*(1-ph)})`;ctx.beginPath();ctx.ellipse(cx,cy,rx,rx*.2,0,0,7);ctx.stroke()}});
+ lans=lans.filter(o=>{o.age+=dt;const p=o.age/o.dur;if(p>=1){o.el.remove();return false}o.el.style.transform=`translate(${o.x+Math.sin(o.age*.9+o.ph)*18}px,${H*.85-p*(H*.85+160)}px) scale(${1-p*.5})`;o.el.style.opacity=p>.8?(1-p)*5:1;return true});
+ if(t>nextF){nextF=t+2500+Math.random()*3000;launch()}
+ rk=rk.filter(o=>{o.y-=320*dt;ctx.fillStyle='#ffe9b0';ctx.fillRect(o.x,o.y,2,9);if(o.y<=o.ty){burst(o.x,o.y,o.h);return false}return true});
+ fw=fw.filter(p=>{p.x+=p.vx*60*dt;p.y+=p.vy*60*dt;p.vx*=.985;p.vy=p.vy*.985+.03*60*dt;p.l-=dt*.55;if(p.l<=0)return false;ctx.fillStyle=`hsla(${p.h},100%,65%,${p.l})`;ctx.beginPath();ctx.arc(p.x,p.y,2,0,7);ctx.fill();if(p.y<H*.5){ctx.fillStyle=`hsla(${p.h},100%,65%,${p.l*.25})`;ctx.fillRect(p.x-1,H-p.y,2,3)}return true});
+ if(t>nextL){nextL=t+9000;if(lans.length<5)spawnLantern(rnd(['สุขสันต์วันลอยกระทง','ขอให้สมหวัง','ขอให้มีความสุข']))}}
+requestAnimationFrame(loop);
+/* ---------- views & actions ---------- */
+function go(v){view=v;document.body.classList.toggle('rv',v==='river');if(v==='river')window.scrollTo(0,0);$$('.view').forEach(s=>{s.hidden=s.id!=='v-'+v});$$('nav button').forEach(b=>b.setAttribute('aria-current',b.dataset.v===v));if(v==='river')size()}
+$$('nav button').forEach(b=>{b.onclick=()=>go(b.dataset.v)});
+$('#float').onclick=()=>{go('river');const o=floatKr({...S,flowers:[...S.flowers]},$('#nm').value.trim(),$('#wish').value.trim(),W*(.5+Math.random()*.3));o.el.classList.add('open');setTimeout(()=>o.el.classList.remove('open'),7000);[0,400,800].forEach(d=>setTimeout(launch,d));st.scrollIntoView({behavior:'smooth',block:'center'})};
+$('#lt').oninput=e=>{$('#lp').textContent=e.target.value||'เขียนคำอธิษฐาน'};
+$('#release').onclick=()=>{go('river');spawnLantern($('#lt').value.trim()||'ขอให้มีความสุข',W*(.15+Math.random()*.7),{...L});st.scrollIntoView({behavior:'smooth',block:'center'})};
+st.addEventListener('click',e=>{if(e.target.closest('.kr'))return;const r=st.getBoundingClientRect();if(e.clientY-r.top<H*.5)launch(e.clientX-r.left)});
+renderL();build();go('make');
+[['น้ำใส','ขอให้ทุกคนมีความสุข'],['ใจดี','ขอบคุณแม่น้ำ ขอขมาพระแม่คงคา'],['ฟ้าใหม่','ขอให้สุขภาพแข็งแรง'],['ลมหนาว','ขอให้สมหวังในความรัก']].forEach(([n,w])=>floatKr({base:rnd(Object.keys(BS)),flowers:[...new Set(Object.keys(FL).filter(()=>Math.random()<.4).concat(['lotus']))].slice(0,4),candle:rnd(Object.keys(CC)),incense:Math.random()<.6},n,w));
+</script>
+</body>
+</html>
